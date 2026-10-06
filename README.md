@@ -142,18 +142,17 @@ I used Cursor Pro as my pair programmer. The brief names Claude Code but allows 
 
 ### How I used it
 
-- It turned the PDF into a plan for Section B, then built the folder layout, API, page objects, steps, and config from my description.
-- I used it to learn Cucumber profiles and hooks, SQL window functions, Highcharts SVG, and self-healing locators.
-- Twice I had it grade the repo against the brief as a Streamhub evaluator. Both reviews found real gaps.
+ - Converted the PDF brief into an implementation plan and checklist for Section B, then used it to scaffold the folder structure, API, page objects, step definitions, and configuration.
+ - Used it as a learning aid for Cucumber profiles and hooks, SQL window functions, Highcharts SVG behavior, and self-healing locators.
+ - Conducted two independent evaluations of the repository using the brief as the grading criteria. Both reviews identified genuine gaps that I subsequently corrected.
 
 ### What worked
 
-- It checked the live calculator before choosing locators. That is how it found that the chart has 12 points but only 10 real bars, and that the tooltip uses the unrounded EMI.
-- It wrote 93 API scenarios with boundary cases, such as `limit=51`, a 101-character `q`, and malformed JSON.
-- The SQL runner and the locator proof of concept both check real output. Neither trusts the model's answer.
-- It turned the brief into a checklist for each section, so nothing the PDF asked for was missed.
-- It kept the same structure across every section: page objects, steps without selectors, and config from `.env`. The repo reads as one framework, not four separate tasks.
-- It let me spend my time on test design and review instead of boilerplate, so the whole of Section B got done in the time given.
+ - Validated the live calculator before implementing locators. This revealed differences between chart points and actual bars, as well as the use of unrounded EMI values in tooltips.
+ - Generated comprehensive API coverage across functional, boundary, and negative scenarios, including invalid parameters, oversized inputs, and malformed requests.
+ - Ensured that both the SQL runner and locator proof of concept validate actual outputs rather than relying solely on model-generated conclusions.
+ - Maintained a consistent framework structure across all sections, with page objects, selector-free step definitions, and environment-driven configuration.
+ - Used AI primarily for implementation and analysis while retaining responsibility for test design, validation, debugging, and final review.
 
 ### Where I had to correct it
 
@@ -161,7 +160,6 @@ I used Cursor Pro as my pair programmer. The brief names Claude Code but allows 
 - It treated the bar count, the tooltip check, and the self-healing exercise as optional extras. The brief requires all three.
 - It used playwright-bdd. The brief names Cucumber, so I switched it to `@cucumber/cucumber`.
 - It took three rounds to get role, label, and text locators. It kept arguing that chart ids and CSS classes were good enough.
-- Its first reflection never named the tool.
 - The first review found a test URL built outside `config/env.ts`, an API server starting during UI runs, and noisy console logs.
 - I asked whether decimal math could miss the exact SQL limits. The 10% check rejected 2,292 of 5,406 exact pairs with paise amounts, so it now compares whole paise.
 - Scenario 1 returned columns the brief didn't ask for. I cut it down to one join.
