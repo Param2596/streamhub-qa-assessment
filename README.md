@@ -21,7 +21,7 @@ GitHub shows HTML files as source. Download an HTML report and open it in a brow
 
 ### B1. Build an API
 
-The loan API running locally, with requests sent from the Postman collection.
+These requests come from the Postman collection and go to the API running locally.
 
 A valid list request returns `200` with a page of loans.
 
@@ -37,7 +37,7 @@ An invalid parameter returns `400` with the error code and field.
 
 ### B3. UI test cases
 
-The UI report is 3 of 3 passed. The file list is alphabetical, so the bar chart feature is above the pie chart feature. The tests ran the pie chart first.
+All 3 UI scenarios passed. The report lists files alphabetically, so the bar chart feature is above the pie chart feature. The tests ran the pie chart first.
 
 ![B3 Cucumber UI report, 3 of 3 passed](reports/screenshots/b3-ui-report-summary.png)
 
@@ -61,7 +61,7 @@ The scenario passed. It sets the three sliders, changes the schedule month to Ja
 
 ![B3 bar chart steps in the Cucumber report](reports/screenshots/b3-ui-report-summary-2.png)
 
-The bar chart after that run. The open tooltip is for 2031.
+This is the bar chart after that run. The open tooltip is for 2031.
 
 ![B3 test case 2, personal loan bar chart with tooltip](reports/screenshots/b3-personal-loan-of-10l-at-12-for-5-years.png)
 
@@ -184,11 +184,11 @@ The UI tests run against the live site, so two things on that site can break the
 
 ### SQL
 
-`npm run sql` creates a SQLite database and runs the files in `sql/`. `sql/schema.sql` has the tables, `sql/seed.sql` has the data and a comment on each case, and the two query files hold the answers. The runner checks the returned rows against the expected rows before it writes the screenshots.
+`npm run sql` creates a SQLite database and runs the files in `sql/`. `sql/schema.sql` has the tables, `sql/seed.sql` has the data and a comment on each case, and the two query files contain the queries. The runner checks the returned rows against the expected rows before it writes the screenshots.
 
-Scenario 1 returns a payment and the payment back when the amounts are within 10% and the times are within 24 hours. `account_a` is whoever paid first. The seed also includes an 11% gap, a gap of 24 hours and one minute, and a payment that continues to a third account. The query leaves those out. A check constraint rejects a transfer from an account to itself.
+Scenario 1 returns a payment and the payment back when the amounts are within 10% and the times are within 24 hours. `account_a` is whoever paid first. A gap of exactly 10% counts, and so does a gap of exactly 24 hours. The query compares amounts in whole paise, so 8.40 and 7.56 count as exactly 10% apart. The seed also includes an 11% gap, a gap of 24 hours and one minute, and a payment that continues to a third account. The query leaves those out. A check constraint rejects a transfer from an account to itself.
 
-Scenario 2 returns each player with 30 or more runs in at least three consecutive matches, with the date the streak started. The query numbers each player's innings with `ROW_NUMBER()` and groups the runs of 30 or more into streaks. "Consecutive" here means the player's own consecutive matches, so a match the player did not play does not break the streak. A score under 30 does break it. A streak of four matches is one row, dated on its first match. `matches_in_streak` is an extra column, so the screenshot shows why each row qualified.
+Scenario 2 returns each player with 30 or more runs in at least three consecutive matches, with the date the streak started. The query numbers each player's innings with `ROW_NUMBER()` and groups the runs of 30 or more into streaks. "Consecutive" here means the player's own consecutive matches, so a match the player did not play does not break the streak. A score under 30 does break it. A streak of four matches is one row, dated on its first match. The extra `matches_in_streak` column shows why each row qualified.
 
 The brief could also mean the team's consecutive matches. Under that reading, Suryakumar Yadav's row would drop out, because he missed MI's match on 2024-03-28. The seed data includes that case on purpose.
 
@@ -196,46 +196,52 @@ The brief could also mean the team's consecutive matches. Under that reading, Su
 
 `automation/steps/self-healing/brittle.steps.ts` has five locators that are wrong on purpose. They are a positional CSS path, an absolute XPath, an SVG `nth-child` path, a Highcharts series index, and the untouched default text `₹ 44,986`. `npm run test:ui` does not run them, and nothing replaces them.
 
-[docs/self-healing-locators.md](docs/self-healing-locators.md) explains how a failure is detected, the prompt used to suggest a replacement, and the checks required before a fix is applied. `npm run suggest:locators` is the working example. It opens the live calculator, checks each replacement, and writes [reports/self-healing-suggestions.md](reports/self-healing-suggestions.md). It confirms that `brittle.steps.ts` is unchanged afterwards.
+[docs/self-healing-locators.md](docs/self-healing-locators.md) explains how to detect a locator failure, the prompt that asks for a replacement, and the checks to run before applying a fix. `npm run suggest:locators` is the working example. It opens the live calculator, checks each replacement, and writes [reports/self-healing-suggestions.md](reports/self-healing-suggestions.md). It confirms that `brittle.steps.ts` is unchanged afterwards.
 
 ## AI / Cursor reflection
 
-Cursor Pro was my pair programmer for the whole project. I chose Cursor Pro over Claude Code, and the brief allows any similar AI tool.
+I used Cursor Pro as my pair programmer for the whole project. The brief names Claude Code but allows any similar AI tool.
 
 ### How I used it
 
-- I gave it the assessment PDF and asked for a plan for Section B that covered every requirement. Before writing the UI plan, it opened the live calculator to check the tabs, fields, and charts.
-- I described the framework I wanted, and it scaffolded the folders, the Express and Zod API, the JSON data, the page objects, the step definitions, and the config.
-- I iterated with it. I asked how the API was structured, whether it had pagination, and how to test it in Postman. I asked it to add `POST`, to cover the B3 steps, and to add the bar count and tooltip checks. I also asked it to move the tests to Cucumber and to write the self-healing exercise.
-- I used it for unfamiliar parts. These were Cucumber profiles and hooks, the window-function approach to the SQL streak, reading Highcharts SVG, and the self-healing approach.
-- I used it as a reviewer. Near the end I asked it to grade the repo against the brief as a Streamhub evaluator would. That review found the fixes listed at the end of this section.
+- I gave it the assessment PDF and asked for a plan for Section B that covered every requirement. Before it planned the UI tests, it opened the live calculator and looked at the tabs, fields, and charts.
+- I described the framework I wanted. It set up the folders, the Express and Zod API, the JSON data, the page objects, the step definitions, and the config.
+- I built the rest with it one step at a time. I asked how the API was structured, whether it had pagination, and how to test it in Postman. Then I asked it to add `POST`, cover every B3 step, add the bar count and tooltip checks, move the tests to Cucumber, and write the self-healing exercise.
+- I used it to learn the parts that were new to me. Those were Cucumber profiles and hooks, the window-function approach for the SQL streak, reading Highcharts SVG, and self-healing locators.
+- I used it as a reviewer. Twice I asked it to grade the repo against the brief the way a Streamhub evaluator would. Both reviews found problems, and they are listed below.
 
 ### What worked
 
-- The plan mapped each line of the PDF to a file, so nothing in Section B was missed.
-- The scaffold ran on the first day. It had three endpoints, validation that names the bad field, and a generated repayment schedule.
-- It wrote 93 API scenarios with boundary values, such as `page=1000001`, `limit=51`, a 101-character `q`, and malformed JSON.
-- It inspected the live page before choosing locators. That is how it found that the slider handle has no role and that the chart's accessible name starts with "Created with Highcharts". It also found that the chart has 12 points and 10 real bars, and that the tooltip uses the unrounded EMI.
-- The SQL streak query uses `ROW_NUMBER()` to group consecutive innings. The runner asserts the exact expected rows, so a wrong query fails before any screenshot is written.
-- The self-healing proof of concept checks each suggestion on the live page instead of trusting the model's answer.
+- The plan tied each line of the PDF to a file, so nothing in Section B was left out.
+- The first version of the API ran on day one. It had three endpoints, validation that names the bad field, and a generated repayment schedule.
+- It wrote 93 API scenarios, including boundary values such as `page=1000001`, `limit=51`, a 101-character `q`, and malformed JSON.
+- It checked the live page before choosing locators. That is how it found that the slider handle has no role, and that the chart's accessible name starts with "Created with Highcharts". It also found that the chart has 12 points but only 10 real bars, and that the tooltip uses the unrounded EMI.
+- The SQL streak query uses `ROW_NUMBER()` to group consecutive innings. The SQL runner checks for the exact expected rows, so a wrong query fails before it writes any screenshot.
+- The self-healing proof of concept tries each suggested locator on the live page instead of trusting the model's answer.
 
 ### What did not work, and what I corrected
 
-The first version was often the wrong method. I had to point it back at the brief several times.
+Its first answer was often the wrong approach, and I had to steer it back to the brief many times. Everything in this list is fixed in the current code.
 
-- The first API was read-only. It said `POST` was not needed because the brief only asks for an API that returns data. I asked for a simple create endpoint. Created loans stay in memory, so the list checks that do not filter by type expect a total of at least 18, not exactly 18.
-- For B3 I told it to ask before adding anything. It covered the two test cases and left out the self-healing exercise, the expected bar count, and the tooltip check against the schedule. It listed them as possible extras instead of treating them as part of the brief. I asked for all three.
-- The first runner was playwright-bdd, which compiles Gherkin into Playwright tests. The brief names Cucumber, so I asked for `@cucumber/cucumber`. The first Cucumber command passed only `--profile api` and found 0 scenarios, because that profile does not inherit the feature paths from `default`.
-- On locators it took three rounds. First it agreed with a review that the chart ids and Highcharts classes were "the best available" and could ship. Then it said nothing outside the self-healing file was brittle. I pointed at `emi-calculator.page.ts`, which still used a parent step, `.first()`, datepicker classes, and chart ids. Its next pass removed the positional selectors but still used CSS. I asked again for role, label, and text, and that pass moved the calendar, the headings, and the charts to role and text locators.
-- The first draft of this reflection listed the problems but never named the tool. The brief asks for that by name.
-- The evaluator review found problems the earlier passes had missed. The test API URL was built in `hooks.ts` instead of `config/env.ts`. The profile check started the API server during UI runs. The console logs included PowerShell error text and a dotenv banner. A final UI run failed twice on the live site, first on a chart redraw and then on the Google ad link it had flagged earlier but not fixed. All of these are fixed now.
+- The first API was read-only. It said `POST` was not needed, because the brief only asks for an API that returns data. I asked for a simple create endpoint. Created loans stay in memory, so the list checks that don't filter by type expect at least 18 loans, not exactly 18.
+- For B3 I told it to ask before adding anything. It covered the two test cases but left out the self-healing exercise, the expected bar count, and the tooltip check against the schedule. It offered them as optional extras, even though the brief asks for them. I asked for all three.
+- It first used playwright-bdd, which turns Gherkin into Playwright tests. The brief names Cucumber, so I asked for `@cucumber/cucumber`. Its first Cucumber command passed only `--profile api` and found 0 scenarios, because that profile doesn't inherit the feature paths from `default`.
+- Locators took three rounds. First it agreed with a review that the chart ids and Highcharts classes were "the best available". Then it said nothing outside the self-healing file was brittle. I pointed at `emi-calculator.page.ts`, which still used a parent step, `.first()`, datepicker classes, and chart ids. Its next pass removed the positional selectors but kept CSS. I asked again for role, label, and text locators, and that pass moved the calendar, the headings, and the charts over.
+- Its first draft of this reflection listed the problems but never named the tool, and the brief asks for that.
+- The first evaluator review found problems the earlier passes missed. `hooks.ts` built the test API URL instead of reading it from `config/env.ts`. The profile check started the API server during UI runs. The console logs had PowerShell error text and a dotenv banner. The last UI run then failed twice on the live site, once on a chart redraw and once on a Google ad link it had flagged earlier but never fixed.
+- SQL Scenario 1 checked the 10% and 24-hour limits with decimal division. I asked whether the decimals could drift at the exact limits. The 24-hour check held up in testing, but the 10% check did not. It rejected 2,292 of 5,406 pairs that were exactly 10% apart with paise amounts, such as 8.40 and 7.56. The query now compares whole paise, and the seed data includes that case.
+- Scenario 1 also did more than the brief asked. It returned percent and hours columns and used six `CASE` lines to order each pair. I asked it to answer only the question, and the query is now a single join.
+- The README and `package.json` said Node 20, but `node:sqlite` needs Node 22.13 or newer. I caught the mismatch, and both now say 22.13.
+- It wrote a script that only captured report images for this README. That isn't testing, so I removed it.
+- A second evaluator review found more. The bar chart screenshot cut off the bottom of the graph, and the first fix put a locator in `hooks.ts` instead of the page object. `npm run typecheck` skipped the test code. No repayments test combined `year` with `page` and `limit`.
 
 ### Problems found while making those fixes
 
-- SVG nodes have no `innerText`, so the tests read pie labels and the tooltip from `textContent`. The tooltip text runs together as `2027Interest`, so a word-boundary regex never matched the series name.
-- Counting every `.highcharts-point` returned 12. Ten are columns and two are legend swatches. Calling `evaluateHandle` on the bar locator failed strict mode because that locator matches every column, so the handle now comes from the chart root.
-- Rounding the monthly EMI first is correct for the summary, but it differs from the tooltip by a few rupees.
+- SVG nodes have no `innerText`, so the tests read the pie labels and the tooltip from `textContent`. That text runs together, for example `2027Interest`, so a word-boundary regex never matched the series name.
+- Counting every `.highcharts-point` returned 12, which is 10 columns and 2 legend swatches. Calling `evaluateHandle` on the bar locator failed strict mode, because that locator matches every column. The handle now comes from the chart root.
+- Rounding the monthly EMI first matches the summary on the page. The tooltip sums the unrounded EMI, so it differs from that by a few rupees.
 - `getByRole("img", { name: /Break-up of Total Payment/ })` matched nothing, because the image's accessible name starts with "Created with Highcharts". Filtering `getByRole("img")` by the visible text works.
-- `getByRole("heading", { name: "Loan EMI" })` matched two headings. The name check is a substring, and the page also has "Home Loan EMI Calculator". The test uses `/^Loan EMI$/`.
-- The loan type enum could not take both `required_error` and a custom error map in Zod, and the server crashed on startup until `required_error` was removed. An unknown JSON key such as `id` reported no field name, because Zod leaves `path` empty for that issue. The handler reads `issue.keys` instead.
-- Port 3000 was already in use on my machine during development. The API tests use their own port, 3011, so they never connect to a server someone else started.
+- `getByRole("heading", { name: "Loan EMI" })` matched two headings. The name match is a substring, and the page also has "Home Loan EMI Calculator". The test uses `/^Loan EMI$/`.
+- Zod would not accept both `required_error` and a custom error map on the loan type enum, and the server crashed on startup until I removed `required_error`. An unknown JSON key such as `id` reported no field name, because Zod leaves `path` empty for that issue. The handler reads `issue.keys` instead.
+- The Home Loan page also has the bar chart further down. Checking whether that chart exists would have screenshotted the bar chart for the pie scenarios too. The page object now records when a bar chart step runs and only then screenshots the chart.
+- Port 3000 was already in use on my machine. The API tests use their own port, 3011, so they never connect to a server someone else started.
