@@ -2,6 +2,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { parseRupees } from "../support/emi";
 
 export class EmiCalculatorPage {
+  private captureBarChart = false;
+
   constructor(private readonly page: Page) {}
 
   async open(): Promise<void> {
@@ -110,12 +112,14 @@ export class EmiCalculatorPage {
   }
 
   async expectBarChartVisible(): Promise<void> {
+    this.captureBarChart = true;
     const chart = this.barChart();
     await scrollIntoView(chart);
     await expect(chart).toBeVisible();
   }
 
   async barCount(): Promise<number> {
+    this.captureBarChart = true;
     const chart = this.barChart();
     await scrollIntoView(chart);
     // Remaining structural locator: Highcharts column bars are SVG rects with no
@@ -130,11 +134,20 @@ export class EmiCalculatorPage {
   }
 
   async barTooltipText(): Promise<string> {
+    this.captureBarChart = true;
     let text = "";
     await expect(async () => {
       text = await this.hoverTallestBar();
     }).toPass({ timeout: 20_000 });
     return text;
+  }
+
+  async screenshot(): Promise<Buffer> {
+    const chart = this.barChart();
+    if (this.captureBarChart && (await chart.count()) > 0) {
+      return chart.screenshot();
+    }
+    return this.page.screenshot();
   }
 
   private async hoverTallestBar(): Promise<string> {

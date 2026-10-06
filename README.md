@@ -3,7 +3,7 @@
 **Paramjot Singh**<br>
 [er.paramjots@gmail.com](mailto:er.paramjots@gmail.com)
 
-This repo is a solution to Section B of the Streamhub Fullstack + QA Automation Assessment. It has a small loan API, Cucumber tests that call the API with Playwright, the two EMI calculator UI test cases, two SQL scenarios, and a self-healing locator exercise. Section A is not attempted. The brief asks for one section.
+This repo is a solution to Section B of the Streamhub Fullstack + QA Automation Assessment. It has a small loan API, Cucumber tests that call the API with Playwright, the two EMI calculator UI test cases, two SQL scenarios, and a self-healing locator exercise.
 
 ## Results at a glance
 
@@ -12,7 +12,7 @@ These results are from the last run on 6 October 2026.
 | Section | Result | Report | Console log |
 |---|---|---|---|
 | B1. Build an API | 4 endpoints, sent from Postman | `postman/Loan-API.postman_collection.json` | |
-| B2. API automation | 92 scenarios and 560 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
+| B2. API automation | 93 scenarios and 568 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
 | B3. UI test cases | 3 scenarios and 30 steps passed | `reports/ui-cucumber.html` | `reports/ui-run-console.txt` |
 | B4. SQL tests | Scenario 1 returned 6 rows and scenario 2 returned 6, both matching the expected rows | `sql/results/` | `sql/results/scenario1.txt`, `sql/results/scenario2.txt` |
 | Self-healing exercise | 5 scenarios failed on purpose, one per brittle locator | `reports/self-healing-cucumber.html` | `reports/self-healing-run-console.txt` |
@@ -33,7 +33,7 @@ An invalid parameter returns `400` with the error code and field.
 
 ### B2. API automation
 
-![B2 Cucumber API report, 92 of 92 passed](reports/screenshots/b2-api-report-summary.png)
+![B2 Cucumber API report, 93 of 93 passed](reports/screenshots/b2-api-report-summary.png)
 
 ### B3. UI test cases
 
@@ -61,7 +61,7 @@ The scenario passed. It sets the three sliders, changes the schedule month to Ja
 
 ![B3 bar chart steps in the Cucumber report](reports/screenshots/b3-ui-report-summary-2.png)
 
-The page after that run. The open tooltip is for 2031.
+The bar chart after that run. The open tooltip is for 2031.
 
 ![B3 test case 2, personal loan bar chart with tooltip](reports/screenshots/b3-personal-loan-of-10l-at-12-for-5-years.png)
 
@@ -83,7 +83,7 @@ Scenario 2 finds streaks of 30 or more runs in at least three consecutive matche
 
 ![Self-healing report, 0 of 5 passed on purpose](reports/screenshots/self-healing-report-summary.png)
 
-All five scenarios fail on their brittle locator, which is the intended result. The screenshot of each failure is in `reports/screenshots/`. The suggested replacements are in `reports/self-healing-suggestions.md`.
+All five scenarios fail on their brittle locator, which is the intended result. The screenshot of each failure is in `reports/screenshots/`. The suggested replacements are in [reports/self-healing-suggestions.md](reports/self-healing-suggestions.md).
 
 ## Setup
 
@@ -117,7 +117,6 @@ All URLs come from `config/env.ts`. Feature files, step definitions, and page ob
 | `npm run test:self-healing` | Runs the five brittle locators. This run is expected to fail | `reports/self-healing-cucumber.html` |
 | `npm run suggest:locators` | Checks replacement locators on the live calculator and writes the result. It does not edit the broken steps | `reports/self-healing-suggestions.md` |
 | `npm run sql` | Builds the SQLite database, runs both queries, checks the rows, and screenshots the result tables | `sql/results/` |
-| `npm run results:capture` | Captures the summary screen of each Cucumber report for this README. Run it after the test suites | `reports/screenshots/` |
 | `npm run generate:repayments` | Rebuilds `src/api/data/repayments.json` from the loan file | |
 | `npm run typecheck` | Runs `tsc --noEmit` | |
 
@@ -197,7 +196,7 @@ The brief could also mean the team's consecutive matches. Under that reading, Su
 
 `automation/steps/self-healing/brittle.steps.ts` has five locators that are wrong on purpose. They are a positional CSS path, an absolute XPath, an SVG `nth-child` path, a Highcharts series index, and the untouched default text `₹ 44,986`. `npm run test:ui` does not run them, and nothing replaces them.
 
-[docs/self-healing-locators.md](docs/self-healing-locators.md) explains how a failure is detected, the prompt used to suggest a replacement, and the checks required before a fix is applied. `npm run suggest:locators` is the working example. It opens the live calculator, checks each replacement, and writes `reports/self-healing-suggestions.md`. It confirms that `brittle.steps.ts` is unchanged afterwards.
+[docs/self-healing-locators.md](docs/self-healing-locators.md) explains how a failure is detected, the prompt used to suggest a replacement, and the checks required before a fix is applied. `npm run suggest:locators` is the working example. It opens the live calculator, checks each replacement, and writes [reports/self-healing-suggestions.md](reports/self-healing-suggestions.md). It confirms that `brittle.steps.ts` is unchanged afterwards.
 
 ## AI / Cursor reflection
 
@@ -215,7 +214,7 @@ Cursor Pro was my pair programmer for the whole project. I chose Cursor Pro over
 
 - The plan mapped each line of the PDF to a file, so nothing in Section B was missed.
 - The scaffold ran on the first day. It had three endpoints, validation that names the bad field, and a generated repayment schedule.
-- It wrote 92 API scenarios with boundary values, such as `page=1000001`, `limit=51`, a 101-character `q`, and malformed JSON.
+- It wrote 93 API scenarios with boundary values, such as `page=1000001`, `limit=51`, a 101-character `q`, and malformed JSON.
 - It inspected the live page before choosing locators. That is how it found that the slider handle has no role and that the chart's accessible name starts with "Created with Highcharts". It also found that the chart has 12 points and 10 real bars, and that the tooltip uses the unrounded EMI.
 - The SQL streak query uses `ROW_NUMBER()` to group consecutive innings. The runner asserts the exact expected rows, so a wrong query fails before any screenshot is written.
 - The self-healing proof of concept checks each suggestion on the live page instead of trusting the model's answer.

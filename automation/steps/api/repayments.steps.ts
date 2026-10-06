@@ -29,6 +29,15 @@ Then("the repayment total is {int}", async function (this: PlaywrightWorld, tota
   expect(asRepaymentPage(this.api).meta.total).toBe(total);
 });
 
+Then(
+  "every repayment row belongs to loan {int} and year {int}",
+  async function (this: PlaywrightWorld, loanId: number, year: number) {
+    const rows = asRepaymentPage(this.api).data;
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every((row) => row.loanId === loanId && row.year === year)).toBe(true);
+  },
+);
+
 Then("the first repayment for loan {int} matches the amortized opening row", async function (this: PlaywrightWorld, loanId: number) {
   const row = asRepaymentPage(this.api).data[0];
   expect(row).toEqual(openingRow(loanId));

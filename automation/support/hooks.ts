@@ -87,7 +87,7 @@ After({ tags: "@ui" }, async function (this: PlaywrightWorld, { pickle }) {
   if (this.page) {
     // Highcharts animates for about a second after a redraw; capture the settled chart.
     await this.page.waitForTimeout(1_500);
-    const image = await this.page.screenshot();
+    const image = await this.emiPage.screenshot();
     this.attach(image, { mediaType: "image/png", fileName: "page.png" });
     saveScreenshot(`b3-${slug(pickle.name)}`, image);
   }

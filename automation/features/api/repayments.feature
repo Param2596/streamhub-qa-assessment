@@ -27,6 +27,14 @@ Feature: Repayment schedule API
     And the repayment page meta is page 3 and limit 50
     And the repayment total is 120
 
+  Scenario: filter a year and paginate together
+    When I list repayments with query "loanId=1&year=2027&limit=5&page=2"
+    Then the response status is 200
+    And the response is a repayment page
+    And the repayment page meta is page 2 and limit 5
+    And every repayment row belongs to loan 1 and year 2027
+    And the repayment total is 12
+
   Scenario: a seeded schedule repays the principal exactly
     Then the full schedule for loan 1 repays the principal
 
