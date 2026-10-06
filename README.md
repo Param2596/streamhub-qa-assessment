@@ -151,6 +151,9 @@ I used Cursor Pro as my pair programmer. The brief names Claude Code but allows 
 - It checked the live calculator before choosing locators. That is how it found that the chart has 12 points but only 10 real bars, and that the tooltip uses the unrounded EMI.
 - It wrote 93 API scenarios with boundary cases, such as `limit=51`, a 101-character `q`, and malformed JSON.
 - The SQL runner and the locator proof of concept both check real output. Neither trusts the model's answer.
+- It turned the brief into a checklist for each section, so nothing the PDF asked for was missed.
+- It kept the same structure across every section: page objects, steps without selectors, and config from `.env`. The repo reads as one framework, not four separate tasks.
+- It let me spend my time on test design and review instead of boilerplate, so the whole of Section B got done in the time given.
 
 ### Where I had to correct it
 
