@@ -1,5 +1,8 @@
 # Streamhub QA assessment
 
+**Paramjot Singh**<br>
+[er.paramjots@gmail.com](mailto:er.paramjots@gmail.com)
+
 This repo is a solution to Section B of the Streamhub Fullstack + QA Automation Assessment. It has a small loan API, Cucumber tests that call the API with Playwright, the two EMI calculator UI test cases, two SQL scenarios, and a self-healing locator exercise. Section A is not attempted. The brief asks for one section.
 
 ## Results at a glance
@@ -11,7 +14,7 @@ These results are from the last run on 6 October 2026.
 | B1. Build an API | 4 endpoints, sent from Postman | `postman/Loan-API.postman_collection.json` | |
 | B2. API automation | 92 scenarios and 560 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
 | B3. UI test cases | 3 scenarios and 30 steps passed | `reports/ui-cucumber.html` | `reports/ui-run-console.txt` |
-| B4. SQL tests | Scenario 1 returned 5 rows and scenario 2 returned 6, both matching the expected rows | `sql/results/` | `sql/results/scenario1.txt`, `sql/results/scenario2.txt` |
+| B4. SQL tests | Scenario 1 returned 6 rows and scenario 2 returned 6, both matching the expected rows | `sql/results/` | `sql/results/scenario1.txt`, `sql/results/scenario2.txt` |
 | Self-healing exercise | 5 scenarios failed on purpose, one per brittle locator | `reports/self-healing-cucumber.html` | `reports/self-healing-run-console.txt` |
 
 GitHub shows HTML files as source. Download an HTML report and open it in a browser to see every step. The images below are in `reports/screenshots/` and `sql/results/`.
@@ -20,66 +23,71 @@ GitHub shows HTML files as source. Download an HTML report and open it in a brow
 
 The loan API running locally, with requests sent from the Postman collection.
 
-<table>
-<tr>
-<td><img src="reports/screenshots/b1-postman-happy-path.png" alt="B1 happy-path request in Postman" width="420"></td>
-<td><img src="reports/screenshots/b1-postman-error.png" alt="B1 invalid request in Postman returning 400" width="420"></td>
-</tr>
-<tr>
-<td>A valid list request returns <code>200</code> with a page of loans</td>
-<td>An invalid parameter returns <code>400</code> with the error code and field</td>
-</tr>
-</table>
+A valid list request returns `200` with a page of loans.
+
+![B1 happy-path request in Postman](reports/screenshots/b1-postman-happy-path.png)
+
+An invalid parameter returns `400` with the error code and field.
+
+![B1 invalid request in Postman returning 400](reports/screenshots/b1-postman-error.png)
 
 ### B2. API automation
 
-<img src="reports/screenshots/b2-api-report-summary.png" alt="B2 Cucumber API report, 92 of 92 passed" width="640">
+![B2 Cucumber API report, 92 of 92 passed](reports/screenshots/b2-api-report-summary.png)
 
 ### B3. UI test cases
 
-<img src="reports/screenshots/b3-ui-report-summary.png" alt="B3 Cucumber UI report, 3 of 3 passed" width="640">
+The UI report is 3 of 3 passed. The file list is alphabetical, so the bar chart feature is above the pie chart feature. The tests ran the pie chart first.
 
-Test case 1 checks the EMI pie chart.
+![B3 Cucumber UI report, 3 of 3 passed](reports/screenshots/b3-ui-report-summary.png)
 
-<table>
-<tr>
-<td><img src="reports/screenshots/b3-scenario-a-25l-at-10-for-10-years.png" alt="B3 test case 1, scenario A" width="420"></td>
-<td><img src="reports/screenshots/b3-scenario-b-50l-at-7-5-for-15-years.png" alt="B3 test case 1, scenario B" width="420"></td>
-</tr>
-<tr>
-<td>Scenario A is ₹25,00,000 at 10% for 10 years. The EMI is ₹33,038</td>
-<td>Scenario B is ₹50,00,000 at 7.5% for 15 years. The EMI is ₹46,351</td>
-</tr>
-</table>
+#### Test case 1, pie chart
 
-Test case 2 checks the EMI bar chart.
+Both examples passed. Each one checks the calculated EMI, that the pie chart is visible, and that both sections are greater than zero.
 
-<img src="reports/screenshots/b3-personal-loan-of-10l-at-12-for-5-years.png" alt="B3 test case 2, personal loan bar chart with tooltip" width="640">
+![B3 pie chart steps in the Cucumber report](reports/screenshots/b3-ui-report-summary-1.png)
 
-This is ₹10,00,000 at 12% for 5 years, with the schedule starting January 2027. The chart has 10 bars, and the tooltip matches the calculated schedule.
+Scenario A is ₹25,00,000 at 10% for 10 years. The displayed EMI is ₹33,038.
+
+![B3 test case 1, scenario A](reports/screenshots/b3-scenario-a-25l-at-10-for-10-years.png)
+
+Scenario B is ₹50,00,000 at 7.5% for 15 years. The displayed EMI is ₹46,351.
+
+![B3 test case 1, scenario B](reports/screenshots/b3-scenario-b-50l-at-7-5-for-15-years.png)
+
+#### Test case 2, bar chart
+
+The scenario passed. It sets the three sliders, changes the schedule month to January 2027, checks that the chart is visible, counts 10 bars, and checks one tooltip against the calculated schedule.
+
+![B3 bar chart steps in the Cucumber report](reports/screenshots/b3-ui-report-summary-2.png)
+
+The page after that run. The open tooltip is for 2031.
+
+![B3 test case 2, personal loan bar chart with tooltip](reports/screenshots/b3-personal-loan-of-10l-at-12-for-5-years.png)
 
 ### B4. SQL tests
 
-<table>
-<tr>
-<td><img src="sql/results/scenario1-output.png" alt="B4 scenario 1, round-trip transfers" width="420"></td>
-<td><img src="sql/results/scenario2-output.png" alt="B4 scenario 2, IPL streaks" width="420"></td>
-</tr>
-<tr>
-<td>Scenario 1 finds round-trip transfers within 10% and 24 hours</td>
-<td>Scenario 2 finds streaks of 30 or more runs in at least three consecutive matches</td>
-</tr>
-</table>
+Scenario 1 finds round-trip transfers within 10% and 24 hours.
+
+![B4 scenario 1, round-trip transfers](sql/results/scenario1-output.png)
+
+![B4 scenario 1 query](sql/results/scenario1-query.png)
+
+Scenario 2 finds streaks of 30 or more runs in at least three consecutive matches.
+
+![B4 scenario 2, IPL streaks](sql/results/scenario2-output.png)
+
+![B4 scenario 2 query](sql/results/scenario2-query.png)
 
 ### Self-healing exercise
 
-<img src="reports/screenshots/self-healing-report-summary.png" alt="Self-healing report, 0 of 5 passed on purpose" width="640">
+![Self-healing report, 0 of 5 passed on purpose](reports/screenshots/self-healing-report-summary.png)
 
 All five scenarios fail on their brittle locator, which is the intended result. The screenshot of each failure is in `reports/screenshots/`. The suggested replacements are in `reports/self-healing-suggestions.md`.
 
 ## Setup
 
-You need Node.js 20 or newer. The SQL runner uses Node's built-in `node:sqlite`, which prints an experimental warning on Node 24.
+You need Node.js 22.13 or newer. The SQL runner uses Node's built-in `node:sqlite`, which prints an experimental warning on Node 24.
 
 ```powershell
 npm install
@@ -179,7 +187,7 @@ The UI tests run against the live site, so two things on that site can break the
 
 `npm run sql` creates a SQLite database and runs the files in `sql/`. `sql/schema.sql` has the tables, `sql/seed.sql` has the data and a comment on each case, and the two query files hold the answers. The runner checks the returned rows against the expected rows before it writes the screenshots.
 
-Scenario 1 returns a transfer and its reverse when the amounts are within 10% and the times are within 24 hours. A gap of exactly 10% counts. A gap of exactly 24 hours counts. Each pair is one row, and `account_a` is whoever paid first. The query excludes an 11% gap, a gap of 24 hours and one minute, and a payment that goes on to a third account. A check constraint rejects a transfer from an account to itself.
+Scenario 1 returns a payment and the payment back when the amounts are within 10% and the times are within 24 hours. `account_a` is whoever paid first. The seed also includes an 11% gap, a gap of 24 hours and one minute, and a payment that continues to a third account. The query leaves those out. A check constraint rejects a transfer from an account to itself.
 
 Scenario 2 returns each player with 30 or more runs in at least three consecutive matches, with the date the streak started. The query numbers each player's innings with `ROW_NUMBER()` and groups the runs of 30 or more into streaks. "Consecutive" here means the player's own consecutive matches, so a match the player did not play does not break the streak. A score under 30 does break it. A streak of four matches is one row, dated on its first match. `matches_in_streak` is an extra column, so the screenshot shows why each row qualified.
 

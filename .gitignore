@@ -2,7 +2,7 @@ node_modules/
 dist/
 .cursor/
 .vscode/
-sql/results/streamhub.db
+sql/results/streamhub*.db
 .env
 *.log
 .features-gen/

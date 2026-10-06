@@ -16,7 +16,7 @@
     "results:capture": "tsx scripts/capture-results.ts"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.13"
   },
   "dependencies": {
     "dotenv": "^18.0.5",

@@ -44,6 +44,11 @@ INSERT INTO transactions (txn_id, from_account, to_account, amount, txn_time) VA
   (15, 2, 1, 4000.00, '2026-04-05 08:00:00'),
   (16, 1, 2, 4200.00, '2026-04-05 20:00:00');
 
+-- Included: exactly 10% smaller with paise. Dividing 0.84 by 8.40 as decimals gives just over 0.10.
+INSERT INTO transactions (txn_id, from_account, to_account, amount, txn_time) VALUES
+  (17, 1, 2, 8.40, '2026-04-10 08:00:00'),
+  (18, 2, 1, 7.56, '2026-04-10 14:00:00');
+
 INSERT INTO matches (match_id, match_date, team1, team2) VALUES
   (1, '2024-03-23', 'DC', 'CSK'),
   (2, '2024-03-24', 'MI', 'RCB'),

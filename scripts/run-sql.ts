@@ -30,11 +30,12 @@ function table(columns: string[], rows: Record<string, unknown>[]): string {
 }
 
 const expectedRoundTrips = [
-  ["Alice", "Bob", "10000.00", "10000.00", "2026-03-01 10:00:00", "2026-03-01 11:00:00", "0.00", "1.00"],
-  ["Alice", "Bob", "10000.00", "9000.00", "2026-03-05 10:00:00", "2026-03-05 12:00:00", "10.00", "2.00"],
-  ["Alice", "Bob", "10000.00", "9000.00", "2026-03-10 10:00:00", "2026-03-11 10:00:00", "10.00", "24.00"],
-  ["Alice", "Bob", "20000.00", "19000.00", "2026-04-01 08:00:00", "2026-04-01 18:00:00", "5.00", "10.00"],
-  ["Bob", "Alice", "4000.00", "4200.00", "2026-04-05 08:00:00", "2026-04-05 20:00:00", "4.76", "12.00"],
+  ["Alice", "Bob", "10000.00", "10000.00", "2026-03-01 10:00:00", "2026-03-01 11:00:00"],
+  ["Alice", "Bob", "10000.00", "9000.00", "2026-03-05 10:00:00", "2026-03-05 12:00:00"],
+  ["Alice", "Bob", "10000.00", "9000.00", "2026-03-10 10:00:00", "2026-03-11 10:00:00"],
+  ["Alice", "Bob", "20000.00", "19000.00", "2026-04-01 08:00:00", "2026-04-01 18:00:00"],
+  ["Bob", "Alice", "4000.00", "4200.00", "2026-04-05 08:00:00", "2026-04-05 20:00:00"],
+  ["Alice", "Bob", "8.40", "7.56", "2026-04-10 08:00:00", "2026-04-10 14:00:00"],
 ];
 
 const expectedStreaks = [
@@ -47,7 +48,13 @@ const expectedStreaks = [
 ];
 
 fs.mkdirSync(outDir, { recursive: true });
-const db = new DatabaseSync(path.join(outDir, "streamhub.db"));
+const dbPath = path.join(outDir, "streamhub.db");
+try {
+  fs.rmSync(dbPath, { force: true });
+} catch {
+  // A viewer may still have the previous file open.
+}
+const db = new DatabaseSync(fs.existsSync(dbPath) ? path.join(outDir, `streamhub-${Date.now()}.db`) : dbPath);
 db.exec("PRAGMA foreign_keys = ON");
 db.exec(readSql("schema.sql"));
 db.exec(readSql("seed.sql"));
@@ -75,8 +82,6 @@ const actualTrips = roundTrips.map((row) => [
   row.amount_back,
   row.first_time,
   row.second_time,
-  row.pct_diff,
-  row.hours_apart,
 ]);
 const actualStreaks = streaks.map((row) => [row.player_name, row.streak_commenced, row.matches_in_streak]);
 
@@ -98,31 +103,35 @@ const html = `<!DOCTYPE html>
   <meta charset="utf-8" />
   <title>B4 SQL query output</title>
   <style>
-    body { font-family: Georgia, serif; margin: 32px; color: #1c1917; background: #fafaf9; }
+    body { font-family: Georgia, serif; margin: 32px; color: #e6edf3; background: #0d1117; }
     h1 { font-size: 22px; margin: 0 0 8px; }
     h2 { font-size: 18px; margin: 28px 0 8px; }
     p, pre { font-family: Consolas, monospace; font-size: 13px; }
-    pre { background: #fff; border: 1px solid #d6d3d1; padding: 12px; white-space: pre-wrap; }
-    table { border-collapse: collapse; background: #fff; margin-top: 8px; }
-    th, td { border: 1px solid #d6d3d1; padding: 6px 10px; font-family: Consolas, monospace; font-size: 13px; }
-    th { background: #e7e5e4; text-align: left; }
+    pre { display: table; background: #161b22; border: 1px solid #30363d; padding: 12px; white-space: pre; color: #e6edf3; }
+    table { border-collapse: collapse; background: #161b22; margin-top: 8px; }
+    th, td { border: 1px solid #30363d; padding: 6px 10px; font-family: Consolas, monospace; font-size: 13px; }
+    th { background: #21262d; text-align: left; }
     section { margin-bottom: 28px; }
   </style>
 </head>
 <body>
   <section id="scenario-1">
+    <div id="scenario-1-result">
     <h1>Scenario 1 — round trip within 24 hours and 10%</h1>
     <p>Self-transfer Alice to Alice: ${selfTransfer} by CHECK (from_account &lt;&gt; to_account).</p>
-    <pre>${readSql("scenario1-round-trip.sql").replace(/</g, "&lt;")}</pre>
     ${table(
-      ["account_a", "account_b", "amount_out", "amount_back", "first_time", "second_time", "pct_diff", "hours_apart"],
+      ["account_a", "account_b", "amount_out", "amount_back", "first_time", "second_time"],
       roundTrips,
     )}
+    </div>
+    <pre id="scenario-1-query">${readSql("scenario1-round-trip.sql").replace(/</g, "&lt;")}</pre>
   </section>
   <section id="scenario-2">
+    <div id="scenario-2-result">
     <h1>Scenario 2 — IPL 2024 streaks of 30 or more in three consecutive innings</h1>
-    <pre>${readSql("scenario2-ipl-streak.sql").replace(/</g, "&lt;")}</pre>
     ${table(["player_name", "streak_commenced", "matches_in_streak"], streaks)}
+    </div>
+    <pre id="scenario-2-query">${readSql("scenario2-ipl-streak.sql").replace(/</g, "&lt;")}</pre>
   </section>
 </body>
 </html>
@@ -133,10 +142,12 @@ fs.writeFileSync(htmlPath, html);
 
 async function capture(): Promise<void> {
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1100, height: 900 }, deviceScaleFactor: 2 });
+  const page = await browser.newPage({ viewport: { width: 1100, height: 800 }, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(htmlPath).href);
-  await page.locator("#scenario-1").screenshot({ path: path.join(outDir, "scenario1-output.png") });
-  await page.locator("#scenario-2").screenshot({ path: path.join(outDir, "scenario2-output.png") });
+  await page.locator("#scenario-1-result").screenshot({ path: path.join(outDir, "scenario1-output.png") });
+  await page.locator("#scenario-1-query").screenshot({ path: path.join(outDir, "scenario1-query.png") });
+  await page.locator("#scenario-2-result").screenshot({ path: path.join(outDir, "scenario2-output.png") });
+  await page.locator("#scenario-2-query").screenshot({ path: path.join(outDir, "scenario2-query.png") });
   await browser.close();
 }
 
