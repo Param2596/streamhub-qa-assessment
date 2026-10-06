@@ -1,0 +1,9 @@
+
+> streamhub-qa-assessment@1.0.0 test:api
+> cucumber-js --profile default --profile api
+
+
+2 hooks (2 passed)
+92 scenarios (92 passed)
+560 steps (560 passed)
+0m 1.252s (0m 1.175s executing your code)

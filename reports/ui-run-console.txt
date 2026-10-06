@@ -1,0 +1,9 @@
+
+> streamhub-qa-assessment@1.0.0 test:ui
+> cucumber-js --profile default --profile ui
+
+
+2 hooks (2 passed)
+3 scenarios (3 passed)
+30 steps (30 passed)
+0m 17.274s (0m 17.252s executing your code)

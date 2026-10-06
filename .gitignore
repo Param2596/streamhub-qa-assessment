@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.cursor/
+.vscode/
+sql/results/streamhub.db
+.env
+*.log
+.features-gen/
+test-results/
+playwright-report/

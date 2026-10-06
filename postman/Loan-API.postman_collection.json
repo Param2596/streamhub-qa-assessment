@@ -1,0 +1,373 @@
+{
+  "info": {
+    "name": "Streamhub Loan API",
+    "description": "Import this collection into Postman to test the loan catalog API at http://127.0.0.1:3000.\n\nStart the server first:\n  npm start\n\nCollection variable `baseUrl` defaults to http://127.0.0.1:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Happy path",
+      "item": [
+        {
+          "name": "Create loan (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Personal 2Y\",\n  \"lender\": \"SwiftCash\",\n  \"type\": \"personal\",\n  \"amount\": 250000,\n  \"annualInterestRate\": 14.5,\n  \"tenureMonths\": 24,\n  \"city\": \"Pune\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/loans",
+            "description": "Creates a loan. Id is assigned automatically. New loans live in memory until the server restarts."
+          },
+          "response": []
+        },
+        {
+          "name": "List loans (defaults)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/loans"
+          },
+          "response": []
+        },
+        {
+          "name": "List home loans sorted by amount desc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?type=home&sort=amount&order=desc&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [
+                { "key": "type", "value": "home" },
+                { "key": "sort", "value": "amount" },
+                { "key": "order", "value": "desc" },
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search by lender (q=north)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?q=north",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [{ "key": "q", "value": "north" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by amount range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?minAmount=500000&maxAmount=3000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [
+                { "key": "minAmount", "value": "500000" },
+                { "key": "maxAmount", "value": "3000000" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagination page 2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?page=2&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [
+                { "key": "page", "value": "2" },
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get loan by id (1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/loans/1"
+          },
+          "response": []
+        },
+        {
+          "name": "Get loan by id (2 - Metro Home)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/loans/2"
+          },
+          "response": []
+        },
+        {
+          "name": "Repayments for loan 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/repayments?loanId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "repayments"],
+              "query": [{ "key": "loanId", "value": "1" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Repayments for loan 1 in 2026",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/repayments?loanId=1&year=2026",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "repayments"],
+              "query": [
+                { "key": "loanId", "value": "1" },
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Repayments page 3 (loan 1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/repayments?loanId=1&page=3&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "repayments"],
+              "query": [
+                { "key": "loanId", "value": "1" },
+                { "key": "page", "value": "3" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Edge / error cases",
+      "item": [
+        {
+          "name": "400 - page=0",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?page=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [{ "key": "page", "value": "0" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - limit=51",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?limit=51",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [{ "key": "limit", "value": "51" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - invalid type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?type=crypto",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [{ "key": "type", "value": "crypto" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - minAmount > maxAmount",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?minAmount=5000000&maxAmount=1000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [
+                { "key": "minAmount", "value": "5000000" },
+                { "key": "maxAmount", "value": "1000" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - q too long (101 chars)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?q=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - unexpected query param",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans?foo=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loans"],
+              "query": [{ "key": "foo", "value": "1" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "404 - loan not found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/loans/99999"
+          },
+          "response": []
+        },
+        {
+          "name": "400 - bad loan id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/loans/abc"
+          },
+          "response": []
+        },
+        {
+          "name": "400 - repayments missing loanId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/repayments"
+          },
+          "response": []
+        },
+        {
+          "name": "404 - repayments unknown loan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/repayments?loanId=99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "repayments"],
+              "query": [{ "key": "loanId", "value": "99999" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "400 - POST missing amount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Broken Loan\",\n  \"lender\": \"SwiftCash\",\n  \"type\": \"personal\",\n  \"annualInterestRate\": 12,\n  \"tenureMonths\": 12,\n  \"city\": \"Pune\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/loans"
+          },
+          "response": []
+        },
+        {
+          "name": "405 - PUT not allowed on loans",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{baseUrl}}/api/v1/loans"
+          },
+          "response": []
+        },
+        {
+          "name": "405 - POST not allowed on loan by id",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{baseUrl}}/api/v1/loans/1"
+          },
+          "response": []
+        },
+        {
+          "name": "404 - unknown route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/nope"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

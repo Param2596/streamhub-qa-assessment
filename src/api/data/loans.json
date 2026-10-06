@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "City Home 10Y",
+    "lender": "Northwind Housing",
+    "type": "home",
+    "amount": 2500000,
+    "annualInterestRate": 10,
+    "tenureMonths": 120,
+    "city": "Pune"
+  },
+  {
+    "id": 2,
+    "name": "Metro Home 15Y",
+    "lender": "Harbor Bank",
+    "type": "home",
+    "amount": 5000000,
+    "annualInterestRate": 7.5,
+    "tenureMonths": 180,
+    "city": "Mumbai"
+  },
+  {
+    "id": 3,
+    "name": "Suburb Home 10Y",
+    "lender": "Greenfield Finance",
+    "type": "home",
+    "amount": 1500000,
+    "annualInterestRate": 8.5,
+    "tenureMonths": 120,
+    "city": "Bengaluru"
+  },
+  {
+    "id": 4,
+    "name": "Villa Home 5Y",
+    "lender": "Summit Credit",
+    "type": "home",
+    "amount": 800000,
+    "annualInterestRate": 9,
+    "tenureMonths": 60,
+    "city": "Hyderabad"
+  },
+  {
+    "id": 5,
+    "name": "Budget Home 2Y",
+    "lender": "Plainseed Loans",
+    "type": "home",
+    "amount": 500000,
+    "annualInterestRate": 11,
+    "tenureMonths": 24,
+    "city": "Jaipur"
+  },
+  {
+    "id": 6,
+    "name": "Estate Home 12Y",
+    "lender": "Oak and River",
+    "type": "home",
+    "amount": 7500000,
+    "annualInterestRate": 8,
+    "tenureMonths": 144,
+    "city": "Chennai"
+  },
+  {
+    "id": 7,
+    "name": "Flex Personal 3Y",
+    "lender": "Northwind Housing",
+    "type": "personal",
+    "amount": 300000,
+    "annualInterestRate": 14,
+    "tenureMonths": 36,
+    "city": "Pune"
+  },
+  {
+    "id": 8,
+    "name": "Quick Personal 1Y",
+    "lender": "SwiftCash",
+    "type": "personal",
+    "amount": 100000,
+    "annualInterestRate": 16,
+    "tenureMonths": 12,
+    "city": "Delhi"
+  },
+  {
+    "id": 9,
+    "name": "Family Personal 5Y",
+    "lender": "Harbor Bank",
+    "type": "personal",
+    "amount": 750000,
+    "annualInterestRate": 12,
+    "tenureMonths": 60,
+    "city": "Mumbai"
+  },
+  {
+    "id": 10,
+    "name": "Medical Personal 2Y",
+    "lender": "CareCredit",
+    "type": "personal",
+    "amount": 200000,
+    "annualInterestRate": 15,
+    "tenureMonths": 24,
+    "city": "Kochi"
+  },
+  {
+    "id": 11,
+    "name": "Travel Personal 4Y",
+    "lender": "Summit Credit",
+    "type": "personal",
+    "amount": 400000,
+    "annualInterestRate": 13.5,
+    "tenureMonths": 48,
+    "city": "Goa"
+  },
+  {
+    "id": 12,
+    "name": "Education Bridge 3Y",
+    "lender": "Plainseed Loans",
+    "type": "personal",
+    "amount": 600000,
+    "annualInterestRate": 11.5,
+    "tenureMonths": 36,
+    "city": "Lucknow"
+  },
+  {
+    "id": 13,
+    "name": "City Hatch 5Y",
+    "lender": "AutoNest",
+    "type": "car",
+    "amount": 600000,
+    "annualInterestRate": 9.5,
+    "tenureMonths": 60,
+    "city": "Pune"
+  },
+  {
+    "id": 14,
+    "name": "Sedan 7Y",
+    "lender": "Harbor Bank",
+    "type": "car",
+    "amount": 1200000,
+    "annualInterestRate": 9,
+    "tenureMonths": 84,
+    "city": "Mumbai"
+  },
+  {
+    "id": 15,
+    "name": "SUV 3Y",
+    "lender": "Wheelhouse",
+    "type": "car",
+    "amount": 1800000,
+    "annualInterestRate": 10.5,
+    "tenureMonths": 36,
+    "city": "Delhi"
+  },
+  {
+    "id": 16,
+    "name": "Compact 2Y",
+    "lender": "SwiftCash",
+    "type": "car",
+    "amount": 450000,
+    "annualInterestRate": 12,
+    "tenureMonths": 24,
+    "city": "Ahmedabad"
+  },
+  {
+    "id": 17,
+    "name": "EV 4Y",
+    "lender": "Greenfield Finance",
+    "type": "car",
+    "amount": 1500000,
+    "annualInterestRate": 8.75,
+    "tenureMonths": 48,
+    "city": "Bengaluru"
+  },
+  {
+    "id": 18,
+    "name": "Premium 6Y",
+    "lender": "Oak and River",
+    "type": "car",
+    "amount": 2500000,
+    "annualInterestRate": 9.25,
+    "tenureMonths": 72,
+    "city": "Chennai"
+  }
+]

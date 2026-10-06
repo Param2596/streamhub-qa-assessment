@@ -1,0 +1,96 @@
+
+> streamhub-qa-assessment@1.0.0 test:self-healing
+> cucumber-js --profile default --profile self-healing
+
+
+Failed scenarios:
+  1) positional input for the loan amount # automation\features\self-healing\brittle-locators.feature:7
+       Then the positional loan amount field is visible # automation\steps\self-healing\brittle.steps.ts:7
+           Error: expect(locator).toBeVisible() failed
+           
+           Locator: locator('div:nth-child(3) > input.loan-amount')
+           Expected: visible
+           Timeout: 3000ms
+           Error: element(s) not found
+           
+           Call log:
+             - Expect "toBeVisible" locator('div:nth-child(3) > input.loan-amount') with timeout 3000ms
+             - waiting for locator('div:nth-child(3) > input.loan-amount')
+           
+               at captureRawStack (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+               at callMatcherAsStep (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13310:57)
+               at Object.toBeVisible (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13302:23)
+               at PlaywrightWorld.<anonymous> (C:\Users\param\Projects\streamhub-qa-assessment\automation\steps\self-healing\brittle.steps.ts:8:75)
+  2) absolute path for the EMI figure # automation\features\self-healing\brittle-locators.feature:11
+       Then the absolute EMI figure path is visible # automation\steps\self-healing\brittle.steps.ts:11
+           Error: expect(locator).toBeVisible() failed
+           
+           Locator: locator('//form[@id=\'calculator\']/div[4]/span[@class=\'emi-value\']')
+           Expected: visible
+           Timeout: 3000ms
+           Error: element(s) not found
+           
+           Call log:
+             - Expect "toBeVisible" locator('//form[@id=\'calculator\']/div[4]/span[@class=\'emi-value\']') with timeout 3000ms
+             - waiting for locator('//form[@id=\'calculator\']/div[4]/span[@class=\'emi-value\']')
+           
+               at captureRawStack (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+               at callMatcherAsStep (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13310:57)
+               at Object.toBeVisible (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13302:23)
+               at PlaywrightWorld.<anonymous> (C:\Users\param\Projects\streamhub-qa-assessment\automation\steps\self-healing\brittle.steps.ts:12:101)
+  3) positional pie slice # automation\features\self-healing\brittle-locators.feature:15
+       Then the positional pie slice is visible # automation\steps\self-healing\brittle.steps.ts:17
+           Error: expect(locator).toBeVisible() failed
+           
+           Locator: locator('#emipiechart svg > g:nth-child(9) > path:nth-child(4)')
+           Expected: visible
+           Timeout: 3000ms
+           Error: element(s) not found
+           
+           Call log:
+             - Expect "toBeVisible" locator('#emipiechart svg > g:nth-child(9) > path:nth-child(4)') with timeout 3000ms
+             - waiting for locator('#emipiechart svg > g:nth-child(9) > path:nth-child(4)')
+           
+               at captureRawStack (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+               at callMatcherAsStep (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13310:57)
+               at Object.toBeVisible (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13302:23)
+               at PlaywrightWorld.<anonymous> (C:\Users\param\Projects\streamhub-qa-assessment\automation\steps\self-healing\brittle.steps.ts:18:92)
+  4) positional first bar # automation\features\self-healing\brittle-locators.feature:20
+       Then the positional first bar is visible # automation\steps\self-healing\brittle.steps.ts:23
+           Error: expect(locator).toBeVisible() failed
+           
+           Locator: locator('.highcharts-series-9 > rect:nth-child(1)')
+           Expected: visible
+           Timeout: 3000ms
+           Error: element(s) not found
+           
+           Call log:
+             - Expect "toBeVisible" locator('.highcharts-series-9 > rect:nth-child(1)') with timeout 3000ms
+             - waiting for locator('.highcharts-series-9 > rect:nth-child(1)')
+           
+               at captureRawStack (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+               at callMatcherAsStep (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13310:57)
+               at Object.toBeVisible (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13302:23)
+               at PlaywrightWorld.<anonymous> (C:\Users\param\Projects\streamhub-qa-assessment\automation\steps\self-healing\brittle.steps.ts:24:79)
+  5) default EMI text after the amount changes # automation\features\self-healing\brittle-locators.feature:25
+       Then the untouched default EMI text is visible # automation\steps\self-healing\brittle.steps.ts:27
+           Error: expect(locator).toBeVisible() failed
+           
+           Locator: getByText('₹ 44,986', { exact: true })
+           Expected: visible
+           Timeout: 3000ms
+           Error: element(s) not found
+           
+           Call log:
+             - Expect "toBeVisible" getByText('₹ 44,986', { exact: true }) with timeout 3000ms
+             - waiting for getByText('₹ 44,986', { exact: true })
+           
+               at captureRawStack (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+               at callMatcherAsStep (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13310:57)
+               at Object.toBeVisible (C:\Users\param\Projects\streamhub-qa-assessment\node_modules\playwright\lib\matchers\expect.js:13302:23)
+               at PlaywrightWorld.<anonymous> (C:\Users\param\Projects\streamhub-qa-assessment\automation\steps\self-healing\brittle.steps.ts:28:66)
+
+2 hooks (2 passed)
+5 scenarios (5 failed)
+29 steps (24 passed, 5 failed)
+0m 38.797s (0m 38.772s executing your code)
