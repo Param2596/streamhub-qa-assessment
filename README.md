@@ -12,12 +12,12 @@ These results are from the last run on 6 October 2026.
 | Section | Result | Report | Console log |
 |---|---|---|---|
 | B1. Build an API | 4 endpoints, sent from Postman | `postman/Loan-API.postman_collection.json` | |
-| B2. API automation | 93 scenarios and 568 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
-| B3. UI test cases | 3 scenarios and 30 steps passed | `reports/ui-cucumber.html` | `reports/ui-run-console.txt` |
+| B2. API automation | 93 scenarios and 568 steps passed | <a href="https://param2596.github.io/streamhub-qa-assessment/reports/api-cucumber.html" target="_blank">reports/api-cucumber.html</a> | `reports/api-run-console.txt` |
+| B3. UI test cases | 3 scenarios and 30 steps passed | <a href="https://param2596.github.io/streamhub-qa-assessment/reports/ui-cucumber.html" target="_blank">reports/ui-cucumber.html</a> | `reports/ui-run-console.txt` |
 | B4. SQL tests | Scenario 1 returned 6 rows and scenario 2 returned 6, both matching the expected rows | `sql/results/` | `sql/results/scenario1.txt`, `sql/results/scenario2.txt` |
-| Self-healing exercise | 5 scenarios failed on purpose, one per brittle locator | `reports/self-healing-cucumber.html` | `reports/self-healing-run-console.txt` |
+| Self-healing exercise | 5 scenarios failed on purpose, one per brittle locator | <a href="https://param2596.github.io/streamhub-qa-assessment/reports/self-healing-cucumber.html" target="_blank">reports/self-healing-cucumber.html</a> | `reports/self-healing-run-console.txt` |
 
-GitHub shows HTML files as source. Download an HTML report and open it in a browser to see every step. The images below are in `reports/screenshots/` and `sql/results/`.
+The report links open the rendered pages. The images below are in `reports/screenshots/` and `sql/results/`.
 
 ### B1. Build an API
 
