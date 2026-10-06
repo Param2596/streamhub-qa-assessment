@@ -1,6 +1,8 @@
 import { After, AfterAll, Before, BeforeAll, setDefaultTimeout, Status } from "@cucumber/cucumber";
 import { chromium, request } from "@playwright/test";
 import { spawn, type ChildProcess } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 import { env } from "../../config/env";
 import { projectRoot } from "../../config/paths";
 import { EmiCalculatorPage } from "../pages/emi-calculator.page";
@@ -81,17 +83,36 @@ After({ tags: "@ui or @self-healing" }, async function (this: PlaywrightWorld) {
   await this.browser?.close();
 });
 
-After({ tags: "@ui" }, async function (this: PlaywrightWorld) {
+After({ tags: "@ui" }, async function (this: PlaywrightWorld, { pickle }) {
   if (this.page) {
-    this.attach(await this.page.screenshot(), { mediaType: "image/png", fileName: "page.png" });
+    // Highcharts animates for about a second after a redraw; capture the settled chart.
+    await this.page.waitForTimeout(1_500);
+    const image = await this.page.screenshot();
+    this.attach(image, { mediaType: "image/png", fileName: "page.png" });
+    saveScreenshot(`b3-${slug(pickle.name)}`, image);
   }
 });
 
-After({ tags: "@self-healing" }, async function (this: PlaywrightWorld, { result }) {
+After({ tags: "@self-healing" }, async function (this: PlaywrightWorld, { pickle, result }) {
   if (result?.status === Status.FAILED && this.page) {
-    this.attach(await this.page.screenshot(), { mediaType: "image/png", fileName: "page.png" });
+    const image = await this.page.screenshot();
+    this.attach(image, { mediaType: "image/png", fileName: "page.png" });
+    saveScreenshot(`self-healing-${slug(pickle.name)}`, image);
   }
 });
+
+function slug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function saveScreenshot(name: string, image: Buffer): void {
+  const dir = path.join(projectRoot(), "reports", "screenshots");
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, `${name}.png`), image);
+}
 
 async function waitUntilReady(url: string): Promise<void> {
   const deadline = Date.now() + 30_000;

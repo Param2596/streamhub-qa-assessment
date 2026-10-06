@@ -2,6 +2,81 @@
 
 This repo is a solution to Section B of the Streamhub Fullstack + QA Automation Assessment. It has a small loan API, Cucumber tests that call the API with Playwright, the two EMI calculator UI test cases, two SQL scenarios, and a self-healing locator exercise. Section A is not attempted. The brief asks for one section.
 
+## Results at a glance
+
+These results are from the last run on 6 October 2026.
+
+| Section | Result | Report | Console log |
+|---|---|---|---|
+| B1. Build an API | 4 endpoints, sent from Postman | `postman/Loan-API.postman_collection.json` | |
+| B2. API automation | 92 scenarios and 560 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
+| B3. UI test cases | 3 scenarios and 30 steps passed | `reports/ui-cucumber.html` | `reports/ui-run-console.txt` |
+| B4. SQL tests | Scenario 1 returned 5 rows and scenario 2 returned 6, both matching the expected rows | `sql/results/` | `sql/results/scenario1.txt`, `sql/results/scenario2.txt` |
+| Self-healing exercise | 5 scenarios failed on purpose, one per brittle locator | `reports/self-healing-cucumber.html` | `reports/self-healing-run-console.txt` |
+
+GitHub shows HTML files as source. Download an HTML report and open it in a browser to see every step. The images below are in `reports/screenshots/` and `sql/results/`.
+
+### B1. Build an API
+
+The loan API running locally, with requests sent from the Postman collection.
+
+<table>
+<tr>
+<td><img src="reports/screenshots/b1-postman-happy-path.png" alt="B1 happy-path request in Postman" width="420"></td>
+<td><img src="reports/screenshots/b1-postman-error.png" alt="B1 invalid request in Postman returning 400" width="420"></td>
+</tr>
+<tr>
+<td>A valid list request returns <code>200</code> with a page of loans</td>
+<td>An invalid parameter returns <code>400</code> with the error code and field</td>
+</tr>
+</table>
+
+### B2. API automation
+
+<img src="reports/screenshots/b2-api-report-summary.png" alt="B2 Cucumber API report, 92 of 92 passed" width="640">
+
+### B3. UI test cases
+
+<img src="reports/screenshots/b3-ui-report-summary.png" alt="B3 Cucumber UI report, 3 of 3 passed" width="640">
+
+Test case 1 checks the EMI pie chart.
+
+<table>
+<tr>
+<td><img src="reports/screenshots/b3-scenario-a-25l-at-10-for-10-years.png" alt="B3 test case 1, scenario A" width="420"></td>
+<td><img src="reports/screenshots/b3-scenario-b-50l-at-7-5-for-15-years.png" alt="B3 test case 1, scenario B" width="420"></td>
+</tr>
+<tr>
+<td>Scenario A is ₹25,00,000 at 10% for 10 years. The EMI is ₹33,038</td>
+<td>Scenario B is ₹50,00,000 at 7.5% for 15 years. The EMI is ₹46,351</td>
+</tr>
+</table>
+
+Test case 2 checks the EMI bar chart.
+
+<img src="reports/screenshots/b3-personal-loan-of-10l-at-12-for-5-years.png" alt="B3 test case 2, personal loan bar chart with tooltip" width="640">
+
+This is ₹10,00,000 at 12% for 5 years, with the schedule starting January 2027. The chart has 10 bars, and the tooltip matches the calculated schedule.
+
+### B4. SQL tests
+
+<table>
+<tr>
+<td><img src="sql/results/scenario1-output.png" alt="B4 scenario 1, round-trip transfers" width="420"></td>
+<td><img src="sql/results/scenario2-output.png" alt="B4 scenario 2, IPL streaks" width="420"></td>
+</tr>
+<tr>
+<td>Scenario 1 finds round-trip transfers within 10% and 24 hours</td>
+<td>Scenario 2 finds streaks of 30 or more runs in at least three consecutive matches</td>
+</tr>
+</table>
+
+### Self-healing exercise
+
+<img src="reports/screenshots/self-healing-report-summary.png" alt="Self-healing report, 0 of 5 passed on purpose" width="640">
+
+All five scenarios fail on their brittle locator, which is the intended result. The screenshot of each failure is in `reports/screenshots/`. The suggested replacements are in `reports/self-healing-suggestions.md`.
+
 ## Setup
 
 You need Node.js 20 or newer. The SQL runner uses Node's built-in `node:sqlite`, which prints an experimental warning on Node 24.
@@ -34,27 +109,13 @@ All URLs come from `config/env.ts`. Feature files, step definitions, and page ob
 | `npm run test:self-healing` | Runs the five brittle locators. This run is expected to fail | `reports/self-healing-cucumber.html` |
 | `npm run suggest:locators` | Checks replacement locators on the live calculator and writes the result. It does not edit the broken steps | `reports/self-healing-suggestions.md` |
 | `npm run sql` | Builds the SQLite database, runs both queries, checks the rows, and screenshots the result tables | `sql/results/` |
+| `npm run results:capture` | Captures the summary screen of each Cucumber report for this README. Run it after the test suites | `reports/screenshots/` |
 | `npm run generate:repayments` | Rebuilds `src/api/data/repayments.json` from the loan file | |
 | `npm run typecheck` | Runs `tsc --noEmit` | |
 
 The API tests do not use the server on port 3000. They start their own process on `TEST_API_PORT` and stop it when the run finishes.
 
 To try the API by hand, run `npm start` and import `postman/Loan-API.postman_collection.json` into Postman.
-
-## Test results
-
-These results are from the last run on 6 October 2026. They are committed in `reports/` and `sql/results/`. GitHub shows HTML files as source, so download an HTML report and open it in a browser to see the steps and the UI screenshots.
-
-| Suite | Result | Report | Console log |
-|---|---|---|---|
-| API | 92 scenarios and 560 steps passed | `reports/api-cucumber.html` | `reports/api-run-console.txt` |
-| UI | 3 scenarios and 30 steps passed | `reports/ui-cucumber.html`, with a screenshot after each scenario | `reports/ui-run-console.txt` |
-| Self-healing | 5 scenarios failed on purpose, one per brittle locator | `reports/self-healing-cucumber.html`, with a screenshot of each failure | `reports/self-healing-run-console.txt` |
-| Locator suggestions | 5 replacements checked on the live page | `reports/self-healing-suggestions.md` | |
-| SQL scenario 1 | 5 rows, matching the expected rows | `sql/results/scenario1-output.png` | `sql/results/scenario1.txt` |
-| SQL scenario 2 | 6 rows, matching the expected rows | `sql/results/scenario2-output.png` | `sql/results/scenario2.txt` |
-
-`reports/RESULTS.md` lists the same files.
 
 ## Architecture
 

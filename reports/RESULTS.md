@@ -11,4 +11,6 @@ These results are from the last run on 6 October 2026. The artifacts are under `
 | SQL scenario 1, `npm run sql` | 5 round-trip transfers within 10% and 24 hours | `sql/results/scenario1.txt`, `sql/results/scenario1-output.png` |
 | SQL scenario 2, `npm run sql` | 6 streaks of 30 or more runs in at least three consecutive matches | `sql/results/scenario2.txt`, `sql/results/scenario2-output.png` |
 
+The UI and self-healing runs also save each screenshot to `screenshots/`. `npm run results:capture` adds the summary screen of each Cucumber report to the same folder. The B1 Postman screenshots are in that folder too.
+
 Run the npm scripts in the README to refresh these files.

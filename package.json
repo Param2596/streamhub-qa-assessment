@@ -12,7 +12,8 @@
     "test:ui": "cucumber-js --profile default --profile ui",
     "test:self-healing": "cucumber-js --profile default --profile self-healing",
     "suggest:locators": "tsx scripts/suggest-locators.ts",
-    "sql": "tsx scripts/run-sql.ts"
+    "sql": "tsx scripts/run-sql.ts",
+    "results:capture": "tsx scripts/capture-results.ts"
   },
   "engines": {
     "node": ">=20"

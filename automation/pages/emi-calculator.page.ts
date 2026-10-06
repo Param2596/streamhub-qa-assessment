@@ -5,7 +5,9 @@ export class EmiCalculatorPage {
   constructor(private readonly page: Page) {}
 
   async open(): Promise<void> {
-    await this.page.goto("/");
+    await expect(async () => {
+      await this.page.goto("/", { timeout: 30_000 });
+    }).toPass({ timeout: 90_000 });
   }
 
   async openHomeLoan(): Promise<void> {
