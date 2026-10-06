@@ -3,6 +3,7 @@ import path from "path";
 import { chromium, expect, type Page } from "@playwright/test";
 import { env } from "../config/env";
 import { EmiCalculatorPage } from "../automation/pages/emi-calculator.page";
+import { blockAds } from "../automation/support/block-ads";
 import { calculateEmi } from "../automation/support/emi";
 
 const brittlePath = path.join(process.cwd(), "automation", "steps", "self-healing", "brittle.steps.ts");
@@ -34,10 +35,12 @@ async function main(): Promise<void> {
   }
 
   const browser = await chromium.launch();
-  const page = await browser.newPage({
+  const context = await browser.newContext({
     baseURL: env.emiBaseUrl,
     viewport: { width: 1440, height: 900 },
   });
+  await blockAds(context);
+  const page = await context.newPage();
   page.setDefaultTimeout(20_000);
   const calculator = new EmiCalculatorPage(page);
 

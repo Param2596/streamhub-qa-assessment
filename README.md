@@ -122,6 +122,8 @@ All URLs come from `config/env.ts`. Feature files, step definitions, and page ob
 
 The API tests do not use the server on port 3000. They start their own process on `TEST_API_PORT` and stop it when the run finishes.
 
+GitHub Actions runs `npm run typecheck`, `npm run test:api`, `npm run test:ui`, and `npm run sql` on every push to `main`.
+
 To try the API by hand, run `npm start` and import `postman/Loan-API.postman_collection.json` into Postman.
 
 ## Architecture
@@ -180,7 +182,7 @@ The tabs, the amount, rate, and tenure fields, the year radio, the schedule fiel
 - The slider handle is `#${inputId}slider` plus `.ui-slider-handle`. `getByRole("slider")` matches nothing on this page.
 - The bars and the tooltip are Highcharts nodes inside the bar-chart image. The count excludes legend swatches. The tooltip hover uses the tallest column, not `.first()`.
 
-The UI tests run against the live site, so two things on that site can break them. Highcharts redraws a chart after an input changes, so the page object retries the scroll and the tooltip hover. Google ad overlays sometimes add a second element named "Personal Loan", so the tab locator also filters by the visible text.
+The UI tests run against the live site. Highcharts redraws a chart after an input changes, so the page object retries the scroll and the tooltip hover. The browser context aborts requests to known ad hosts before the page loads.
 
 ### SQL
 
@@ -228,12 +230,13 @@ Its first answer was often the wrong approach, and I had to steer it back to the
 - It first used playwright-bdd, which turns Gherkin into Playwright tests. The brief names Cucumber, so I asked for `@cucumber/cucumber`. Its first Cucumber command passed only `--profile api` and found 0 scenarios, because that profile doesn't inherit the feature paths from `default`.
 - Locators took three rounds. First it agreed with a review that the chart ids and Highcharts classes were "the best available". Then it said nothing outside the self-healing file was brittle. I pointed at `emi-calculator.page.ts`, which still used a parent step, `.first()`, datepicker classes, and chart ids. Its next pass removed the positional selectors but kept CSS. I asked again for role, label, and text locators, and that pass moved the calendar, the headings, and the charts over.
 - Its first draft of this reflection listed the problems but never named the tool, and the brief asks for that.
-- The first evaluator review found problems the earlier passes missed. `hooks.ts` built the test API URL instead of reading it from `config/env.ts`. The profile check started the API server during UI runs. The console logs had PowerShell error text and a dotenv banner. The last UI run then failed twice on the live site, once on a chart redraw and once on a Google ad link it had flagged earlier but never fixed.
+- The first evaluator review found problems the earlier passes missed. `hooks.ts` built the test API URL instead of reading it from `config/env.ts`. The profile check started the API server during UI runs. The console logs had PowerShell error text and a dotenv banner. The last UI run then failed on the live site because Highcharts redrew the chart.
 - SQL Scenario 1 checked the 10% and 24-hour limits with decimal division. I asked whether the decimals could drift at the exact limits. The 24-hour check held up in testing, but the 10% check did not. It rejected 2,292 of 5,406 pairs that were exactly 10% apart with paise amounts, such as 8.40 and 7.56. The query now compares whole paise, and the seed data includes that case.
 - Scenario 1 also did more than the brief asked. It returned percent and hours columns and used six `CASE` lines to order each pair. I asked it to answer only the question, and the query is now a single join.
 - The README and `package.json` said Node 20, but `node:sqlite` needs Node 22.13 or newer. I caught the mismatch, and both now say 22.13.
 - It wrote a script that only captured report images for this README. That isn't testing, so I removed it.
 - A second evaluator review found more. The bar chart screenshot cut off the bottom of the graph, and the first fix put a locator in `hooks.ts` instead of the page object. `npm run typecheck` skipped the test code. No repayments test combined `year` with `page` and `limit`.
+- Ads on live site were causing test failures, so added blocking of ad sites in browsercontext.
 
 ### Problems found while making those fixes
 

@@ -6,6 +6,7 @@ import path from "node:path";
 import { env } from "../../config/env";
 import { projectRoot } from "../../config/paths";
 import { EmiCalculatorPage } from "../pages/emi-calculator.page";
+import { blockAds } from "./block-ads";
 import { LoansApi } from "../pages/loans.api";
 import { RepaymentsApi } from "../pages/repayments.api";
 import { PlaywrightWorld } from "./world";
@@ -74,6 +75,7 @@ Before({ tags: "@ui or @self-healing" }, async function (this: PlaywrightWorld) 
     baseURL: env.emiBaseUrl,
     viewport: { width: 1440, height: 900 },
   });
+  await blockAds(this.context);
   this.page = await this.context.newPage();
   this.emiPage = new EmiCalculatorPage(this.page);
 });
